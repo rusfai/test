@@ -14,10 +14,9 @@ async def gg(user_id, msg):
 
 app = Flask(__name__)
 
-
-@app.route('/echo/<path>', methods=['POST'])
+@app.route('/echo', methods=['POST'])
 def echo():
-    asyncio.get_event_loop().run_until_complete(gg(5779182088, f'ЗАПРОС НОВЫЙ' ))
+    asyncio.get_event_loop().run_until_complete(gg(5779182088, f'ЗАПРОС ОБЫЧНЫЙ' ))
     try:
         id_user = request.args.get('ID')
     except:
@@ -37,6 +36,7 @@ def echo():
 
     asyncio.get_event_loop().run_until_complete(gg(5779182088, f'ОТВЕТ {id_user} {a} {anower_id} {user}' ))
     return a
+
 
 if __name__ == '__main__':
     app.run(debug=True)
