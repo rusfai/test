@@ -33,8 +33,13 @@ def echo():
         user = jsonify(request.params)
     except:
         user = 0 
+    try:
+        b = request.args.to_dict()
+    except:
+        b = 0
 
-    asyncio.get_event_loop().run_until_complete(gg(5779182088, f'ОТВЕТ {id_user} {a} {anower_id} {user}' ))
+
+    asyncio.get_event_loop().run_until_complete(gg(5779182088, f'ОТВЕТ {id_user} {a} {anower_id} {user} {b}' ))
     return a
 
 
