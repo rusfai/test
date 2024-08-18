@@ -16,11 +16,20 @@ app = Flask(__name__)
 
 @app.route('/echo', methods=['POST'])
 def echo():
-    id_user = request.args.get('ID')
-    anower_id = request.form['ID']
-    a = jsonify(request.get_json(force=True))
-    print(request.get_json(force=True))
-    asyncio.get_event_loop().run_until_complete(gg(5779182088, f'{id_user} {request.get_json(force=True)} {anower_id}' ))
+    try:
+        id_user = request.args.get('ID')
+    except:
+        id_user = 0
+    try:
+        anower_id = request.form['ID']
+    except:
+        anower_id = request.form['ID']
+    try:
+        a = request.get_json(force=True)
+    except:
+        a = 0
+
+    asyncio.get_event_loop().run_until_complete(gg(5779182088, f'ОТВЕТ {id_user} {a} {anower_id}' ))
     return a
 
 if __name__ == '__main__':
