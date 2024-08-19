@@ -37,7 +37,7 @@ def echo():
 
 
         id_user = request.args.get('ID')
-        id_user - int(id_user)
+        id_user = int(id_user)
 
         
         mydb = connect()
