@@ -45,6 +45,7 @@ def echo():
 
         mycursor.execute("SELECT lang FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
         lang = mycursor.fetchone()
+        lang = lang[0]
 
         if lang == 'ru':
             text = 'Вы успешно зарегистрировались! Нажмите на "Главное меню", а потом "Получить сигнал"'
