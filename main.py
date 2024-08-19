@@ -46,13 +46,15 @@ def echo():
         mycursor.execute("SELECT lang FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
         lang = mycursor.fetchone()
         lang = lang[0]
-
+        
         if lang == 'ru':
             text = 'Вы успешно зарегистрировались! Нажмите на "Главное меню", а потом "Получить сигнал"'
         elif lang == 'en':
             text = 'You have successfully registered! Click on the "Main Menu" and then "Receive signal"'
         elif lang == 'tr':
             text = 'Başarıyla kaydoldunuz! "Ana Menü" ye ve ardından "Sinyal al" a tıklayın'
+        else:
+            text = 'Ошибка'
 
         mycursor.execute("UPDATE kwork14_user SET register = '{}' WHERE id_tg = '{}' ".format(1, id_user))
         mydb.commit()
