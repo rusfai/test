@@ -6,14 +6,15 @@ import mysql.connector
 from aiogram import types
 from aiogram.utils.keyboard import InlineKeyboardMarkup
 
-admin_tg = 5779182088
 
-db_host = "93.93.207.52"
+
+token = '7541114114:AAE4FLFt7guDGBMztpx62lGrz0mDyTxMcfE'
+
+db_host = "147.45.236.147"
 db_user = "gen_user" 
-db_password = "PUQC7sa$"
+db_password = ",E3+QJ/\C0-q*{"
 db_name = "default_db"
 
-token = '6188238037:AAFZcsoJGYGngbE2awHEHmtOxa2STVqkg0M'
 bot = Bot(token)
 
 def connect():
@@ -44,8 +45,6 @@ app = Flask(__name__)
 def echo():
 
     try:
-        asyncio.get_event_loop().run_until_complete(gg(admin_tg, f'Новая регестрация'))
-
 
         id_user = request.args.get('ID')
         id_user = int(id_user)
