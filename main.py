@@ -44,7 +44,7 @@ app = Flask(__name__)
 def echo():
 
     try:
-        asyncio.get_event_loop().run_until_complete(gg(admin_tg, f'Новая регестрация' ))
+        asyncio.get_event_loop().run_until_complete(gg(admin_tg, f'Новая регестрация'))
 
 
         id_user = request.args.get('ID')
@@ -59,11 +59,11 @@ def echo():
         lang = lang[0]
 
         if lang == 'ru':
-            text = 'Вы успешно зарегистрировались! Нажмите на "Главное меню", а потом "Получить сигнал"'
+            text = 'Вы успешно зарегистрировались! Выберите режим'
         elif lang == 'en':
-            text = 'You have successfully registered! Click on the "Main Menu" and then "Receive signal"'
+            text = 'You have successfully registered! Select a mode'
         elif lang == 'tr':
-            text = 'Başarıyla kaydoldunuz! "Ana Menü" ye ve ardından "Sinyal al" a tıklayın'
+            text = 'Başarıyla kaydoldunuz! Modu seçin'
         else:
             text = 'Ошибка'
 
