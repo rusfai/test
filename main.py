@@ -3,6 +3,8 @@ import asyncio
 from aiogram import Bot
 import mysql
 import mysql.connector
+from aiogram import types
+from aiogram.utils.keyboard import InlineKeyboardMarkup
 
 admin_tg = 5779182088
 
@@ -24,7 +26,16 @@ def connect():
     return mydb
 
 async def gg(user_id, msg):
-    await bot.send_message(user_id, msg)
+    kb_list = [
+        [types.InlineKeyboardButton(text='🛫AVIATOR🛫', callback_data='aviator')],
+        [types.InlineKeyboardButton(text='🚀LUCKY JET🚀', callback_data='luckyjet')],
+        [types.InlineKeyboardButton(text='⭐MINES⭐', callback_data='mines')],
+        [types.InlineKeyboardButton(text='🆕ROYAL MINES🆕', callback_data='royalmines')],
+        [types.InlineKeyboardButton(text='🆕BOMBUCKS🆕', callback_data='bombucks')],
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)
+    await bot.send_message(user_id, msg, reply_markup=keyboard)
 
 
 app = Flask(__name__)
@@ -46,7 +57,7 @@ def echo():
         mycursor.execute("SELECT lang FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
         lang = mycursor.fetchone()
         lang = lang[0]
-        
+
         if lang == 'ru':
             text = 'Вы успешно зарегистрировались! Нажмите на "Главное меню", а потом "Получить сигнал"'
         elif lang == 'en':
