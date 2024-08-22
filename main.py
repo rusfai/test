@@ -77,47 +77,49 @@ app = Flask(__name__)
 @app.route('/echo', methods=['POST'])
 def echo():
 
-
-    id_user = request.args.get('ID')
-    id_user.split('_')
-    id_user = int(id_user[0])
-
-
-    
-    mydb = connect()
-    mycursor = mydb.cursor(buffered=True)
-
-    
-    mycursor.execute("SELECT register FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
-    register = mycursor.fetchone()
-    register = register[0]
-
-    if int(register) == 0:
-
-        mycursor.execute("SELECT lang FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
-        lang = mycursor.fetchone()
-        lang = lang[0]
+    try:
+        id_user = request.args.get('ID')
+        id_user = id_user.split('_')
+        id_user = int(id_user[0])
+        print(id_user)
 
 
-        if lang == 'ru':
-            text = 'Вы успешно зарегистрировались! Выберите режим'
-        elif lang == 'en':
-            text = 'You have successfully registered! Select a mode'
-        elif lang == 'tr':
-            text = 'Başarıyla kaydoldunuz! Modu seçin'
-        else:
-            text = 'Ошибка'
+        
+        mydb = connect()
+        mycursor = mydb.cursor(buffered=True)
 
-        mycursor.execute("UPDATE kwork14_user SET register = '{}' WHERE id_tg = '{}' ".format(1, id_user))
-        mydb.commit()
+        
+        mycursor.execute("SELECT register FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
+        register = mycursor.fetchone()
+        register = register[0]
 
-        mycursor.close()
-        mydb.close()
+        if int(register) == 0:
 
-        asyncio.get_event_loop().run_until_complete(gg(int(id_user), f'{text}'))
+            mycursor.execute("SELECT lang FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
+            lang = mycursor.fetchone()
+            lang = lang[0]
 
-    return 'sucsess'
-    
+
+            if lang == 'ru':
+                text = 'Вы успешно зарегистрировались! Выберите режим'
+            elif lang == 'en':
+                text = 'You have successfully registered! Select a mode'
+            elif lang == 'tr':
+                text = 'Başarıyla kaydoldunuz! Modu seçin'
+            else:
+                text = 'Ошибка'
+
+            mycursor.execute("UPDATE kwork14_user SET register = '{}' WHERE id_tg = '{}' ".format(1, id_user))
+            mydb.commit()
+
+            mycursor.close()
+            mydb.close()
+
+            asyncio.get_event_loop().run_until_complete(gg(int(id_user), f'{text}'))
+
+        return 'sucsess'
+    except:
+        return 'warning' 
 
 @app.route('/click', methods=['POST'])
 def click():
