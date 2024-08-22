@@ -39,6 +39,36 @@ async def gg(user_id, msg):
     await bot.send_message(user_id, msg, reply_markup=keyboard)
 
 
+async def edit(user_id, mess, lang, mod):
+
+    if lang == 'ru':
+        accept = '✅Я зарегестрировался'
+        instruction = '📚ИНСТРУКЦИЯ'
+        main_menu = '🏠Главное меню'
+        text = 'Подтвердите регистрацию'
+    elif lang == 'en':
+        accept = '✅I have registered' 
+        instruction = '📚INSTRUCTION'
+        main_menu = '🏠Main Menu'
+        text = 'Confirm registration'
+    elif lang == 'tr':
+        accept = '✅Kayıt oldum'
+        instruction = '📚TALİMAT'
+        main_menu = '🏠Ana menü'
+        text = 'Kaydı onaylayın'
+
+
+    kb_list = [
+        [types.InlineKeyboardButton(text=accept, callback_data=f'{mod}_reg')],
+        [types.InlineKeyboardButton(text=instruction, callback_data=f'instruction_{mod}')],
+        [types.InlineKeyboardButton(text=main_menu, callback_data=mod)]
+    ]
+
+    keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)
+
+    await bot.edit_message_caption(chat_id=user_id, message_id=mess,  caption=text, reply_markup=keyboard)
+
+
 app = Flask(__name__)
 
 @app.route('/echo', methods=['POST'])
@@ -47,9 +77,59 @@ def echo():
     try:
 
         id_user = request.args.get('ID')
-        id_user = int(id_user)
+        id_user.split('_')
+        id_user = int(id_user[0])
+
 
         
+        mydb = connect()
+        mycursor = mydb.cursor(buffered=True)
+
+        
+        mycursor.execute("SELECT register FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
+        register = mycursor.fetchone()
+        register = register[0]
+
+        if int(register) == 0:
+
+            mycursor.execute("SELECT lang FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
+            lang = mycursor.fetchone()
+            lang = lang[0]
+
+
+            if lang == 'ru':
+                text = 'Вы успешно зарегистрировались! Выберите режим'
+            elif lang == 'en':
+                text = 'You have successfully registered! Select a mode'
+            elif lang == 'tr':
+                text = 'Başarıyla kaydoldunuz! Modu seçin'
+            else:
+                text = 'Ошибка'
+
+            mycursor.execute("UPDATE kwork14_user SET register = '{}' WHERE id_tg = '{}' ".format(1, id_user))
+            mydb.commit()
+
+            mycursor.close()
+            mydb.close()
+
+            asyncio.get_event_loop().run_until_complete(gg(int(id_user), f'{text}'))
+
+        return id_user
+    
+    except:
+        return
+
+@app.route('/click', methods=['POST'])
+def echo():
+
+    try:
+
+        id_user = request.args.get('ID')
+        id_user.split('_')
+        id_user = int(id_user[0])
+        message = int(id_user[1])
+        mod = id_user[2]
+       
         mydb = connect()
         mycursor = mydb.cursor(buffered=True)
 
@@ -57,22 +137,10 @@ def echo():
         lang = mycursor.fetchone()
         lang = lang[0]
 
-        if lang == 'ru':
-            text = 'Вы успешно зарегистрировались! Выберите режим'
-        elif lang == 'en':
-            text = 'You have successfully registered! Select a mode'
-        elif lang == 'tr':
-            text = 'Başarıyla kaydoldunuz! Modu seçin'
-        else:
-            text = 'Ошибка'
-
-        mycursor.execute("UPDATE kwork14_user SET register = '{}' WHERE id_tg = '{}' ".format(1, id_user))
-        mydb.commit()
-
         mycursor.close()
         mydb.close()
 
-        asyncio.get_event_loop().run_until_complete(gg(int(id_user), f'{text}'))
+        asyncio.get_event_loop().run_until_complete(edit(id_user, message, lang, mod))
         return id_user
     
     except:
