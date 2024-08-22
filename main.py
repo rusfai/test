@@ -120,7 +120,7 @@ def echo():
         return
 
 @app.route('/click', methods=['POST'])
-def echo():
+def click():
 
     try:
 
