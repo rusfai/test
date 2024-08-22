@@ -117,7 +117,7 @@ def echo():
         return id_user
     
     except:
-        return
+        return 1
 
 @app.route('/click', methods=['POST'])
 def click():
@@ -144,7 +144,7 @@ def click():
         return id_user
     
     except:
-        return
+        return 1
 
 
 if __name__ == '__main__':
