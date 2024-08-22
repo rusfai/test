@@ -38,7 +38,7 @@ async def gg(user_id, msg):
     keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)
     await bot.send_message(user_id, msg, reply_markup=keyboard)
 
-    return 1
+    return 'sucsess'
 
 
 async def edit(user_id, mess, lang, mod):
@@ -70,7 +70,7 @@ async def edit(user_id, mess, lang, mod):
 
     await bot.edit_message_caption(chat_id=user_id, message_id=mess,  caption=text, reply_markup=keyboard)
 
-    return 1
+    return 'sucsess'
 
 app = Flask(__name__)
 
@@ -117,10 +117,10 @@ def echo():
 
             asyncio.get_event_loop().run_until_complete(gg(int(id_user), f'{text}'))
 
-        return id_user
+        return 'sucsess'
     
     except:
-        return 1
+        return 'sucsess'
 
 @app.route('/click', methods=['POST'])
 def click():
@@ -147,7 +147,7 @@ def click():
         return id_user
     
     except:
-        return 1
+        return 'sucsess'
 
 
 if __name__ == '__main__':
