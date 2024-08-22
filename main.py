@@ -38,6 +38,8 @@ async def gg(user_id, msg):
     keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)
     await bot.send_message(user_id, msg, reply_markup=keyboard)
 
+    return 1
+
 
 async def edit(user_id, mess, lang, mod):
 
@@ -68,6 +70,7 @@ async def edit(user_id, mess, lang, mod):
 
     await bot.edit_message_caption(chat_id=user_id, message_id=mess,  caption=text, reply_markup=keyboard)
 
+    return 1
 
 app = Flask(__name__)
 
