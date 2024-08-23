@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect, url_for
 import asyncio
 from aiogram import Bot
 import mysql
@@ -79,8 +79,8 @@ def echo():
 
     try:
         id_user = request.args.get('ID')
-        id_user = id_user.split('_')
-        id_user = int(id_user[0])
+
+        id_user = int(id_user)
         print(id_user)
 
 
@@ -143,10 +143,12 @@ def click():
         mydb.close()
 
         asyncio.get_event_loop().run_until_complete(edit(id_user, message, lang, mod))
-        return id_user
+
     
     except:
-        return 'sucsess'
+        pass
+    id = id_user
+    return redirect(url_for(f'https://to3a.com/1win?ID={id}'))
 
 
 if __name__ == '__main__':
