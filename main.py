@@ -61,7 +61,7 @@ async def edit(user_id, mess, lang, mod):
 
 
     kb_list = [
-        [types.InlineKeyboardButton(text=accept, callback_data=f'{mod}_reg')],
+        [types.InlineKeyboardButton(text=accept, callback_data=f'getsignal_{mod}_reg')],
         [types.InlineKeyboardButton(text=instruction, callback_data=f'instruction_{mod}')],
         [types.InlineKeyboardButton(text=main_menu, callback_data=mod)]
     ]
