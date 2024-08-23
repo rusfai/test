@@ -121,7 +121,7 @@ def echo():
     except:
         return 'warning' 
 
-@app.route('/click', methods=['POST'])
+@app.route('/click', methods=['GET'])
 def click():
 
 
