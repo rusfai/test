@@ -126,10 +126,12 @@ def click():
 
 
     id_user = request.args.get('ID')
-    id_user.split('_')
-    id_user = int(id_user[0])
-    message = int(id_user[1])
-    mod = id_user[2]
+    id_user = int(id_user)
+
+    message = request.args.get('message')
+    message = int(message)
+
+    mod = request.args.get('mod')
     
     mydb = connect()
     mycursor = mydb.cursor(buffered=True)
