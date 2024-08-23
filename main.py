@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, redirect, url_for
+from flask import Flask, jsonify, request, redirect
 import asyncio
 from aiogram import Bot
 import mysql
@@ -145,8 +145,7 @@ def click():
 
     asyncio.get_event_loop().run_until_complete(edit(id_user, message, lang, mod))
 
-    id = id_user
-    return redirect(url_for(f'https://to3a.com/1win?ID={id}'))
+    return redirect(f'https://to3a.com/1win?ID={id_user}', code=302)
 
 
 if __name__ == '__main__':
