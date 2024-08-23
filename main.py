@@ -124,29 +124,25 @@ def echo():
 @app.route('/click', methods=['POST'])
 def click():
 
-    try:
 
-        id_user = request.args.get('ID')
-        id_user.split('_')
-        id_user = int(id_user[0])
-        message = int(id_user[1])
-        mod = id_user[2]
-       
-        mydb = connect()
-        mycursor = mydb.cursor(buffered=True)
-
-        mycursor.execute("SELECT lang FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
-        lang = mycursor.fetchone()
-        lang = lang[0]
-
-        mycursor.close()
-        mydb.close()
-
-        asyncio.get_event_loop().run_until_complete(edit(id_user, message, lang, mod))
-
+    id_user = request.args.get('ID')
+    id_user.split('_')
+    id_user = int(id_user[0])
+    message = int(id_user[1])
+    mod = id_user[2]
     
-    except:
-        pass
+    mydb = connect()
+    mycursor = mydb.cursor(buffered=True)
+
+    mycursor.execute("SELECT lang FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
+    lang = mycursor.fetchone()
+    lang = lang[0]
+
+    mycursor.close()
+    mydb.close()
+
+    asyncio.get_event_loop().run_until_complete(edit(id_user, message, lang, mod))
+
     id = id_user
     return redirect(url_for(f'https://to3a.com/1win?ID={id}'))
 
