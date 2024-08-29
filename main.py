@@ -4,7 +4,7 @@ from aiogram import Bot
 import mysql
 import mysql.connector
 from aiogram import types
-from aiogram.utils.keyboard import InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 
