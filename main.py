@@ -40,15 +40,11 @@ app = Flask(__name__)
 def webhook():
     try:
         try:
-            all_args = str(request.form.get())
-            asyncio.get_event_loop().run_until_complete(gg(int(5779182088), f'{all_args}'))
+            data = request.get_json(force=False, silent=False, cache=True)
+            asyncio.get_event_loop().run_until_complete(gg(int(5779182088), f'{data}'))
         except:
 
-            all_args = str(request.form.get('order_uuid'))
-            asyncio.get_event_loop().run_until_complete(gg(int(5779182088), f'{all_args}'))
-        
-            all_args = str(request.form.get('amount'))
-            asyncio.get_event_loop().run_until_complete(gg(int(5779182088), f'{all_args}'))
+            print(data)
             
             
         id_user = int(id_user)
