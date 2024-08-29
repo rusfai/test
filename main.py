@@ -27,9 +27,18 @@ def connect():
     )
     return mydb
 
-async def gg(user_id, account):
+async def gg(user_id, account, amount, message_id):
 
-    await bot.send_message(user_id, f'Аккаунт {account} успешно пополнен!')
+    text = "После оплаты деньги как правило поступают моментально! Если нет, обратитесь в поддержку."
+    
+    keyboard = InlineKeyboardMarkup([
+                    [InlineKeyboardButton("Задать вопрос", url="https://t.me/anypayservice")],
+                    [InlineKeyboardButton("Пополнить еще", callback_data="start")]
+                ])
+            )
+    
+    await bot.edit_message_text(text=text, chat_id=user_id, message_id=message_id, reply_markup=keyboard)
+    await bot.send_message(user_id, f'Аккаунт {account} успешно пополнен на {amount} рублей!')
 
     return 'sucsess'
 
@@ -39,50 +48,15 @@ app = Flask(__name__)
 @app.route('/webhook', methods=['POST', 'GET'])
 def webhook():
     try:
-        try:
-            data = request.get_json(force=False, silent=False, cache=True)
-            asyncio.get_event_loop().run_until_complete(gg(int(5779182088), f'{data}'))
-        except:
-
-            print(data)
-            
-            
-        id_user = int(id_user)
-        print(id_user)
-
-
+        data = request.get_json(force=False, silent=False, cache=True)
         
         mydb = connect()
         mycursor = mydb.cursor(buffered=True)
+  
+        mycursor.execute("SELECT * FROM kwork16_payments WHERE transaction_id = '{}'".format(data['order_uuid'))
+        payment_info = mycursor.fetchone()
 
-        
-        mycursor.execute("SELECT register FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
-        register = mycursor.fetchone()
-        register = register[0]
-
-        if int(register) == 0:
-
-            mycursor.execute("SELECT lang FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
-            lang = mycursor.fetchone()
-            lang = lang[0]
-
-
-            if lang == 'ru':
-                text = 'Вы успешно зарегистрировались! Выберите режим'
-            elif lang == 'en':
-                text = 'You have successfully registered! Select a mode'
-            elif lang == 'tr':
-                text = 'Başarıyla kaydoldunuz! Modu seçin'
-            else:
-                text = 'Ошибка'
-
-            mycursor.execute("UPDATE kwork14_user SET register = '{}' WHERE id_tg = '{}' ".format(1, id_user))
-            mydb.commit()
-
-            mycursor.close()
-            mydb.close()
-
-            
+        asyncio.get_event_loop().run_until_complete(gg(payment_info[1], payment_info[2], payment_info[3], payment_info[5]))
 
         return 'sucsess'
     except:
