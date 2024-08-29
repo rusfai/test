@@ -47,13 +47,12 @@ app = Flask(__name__)
 
 @app.route('/webhook', methods=['POST', 'GET'])
 def webhook():
+    mydb = connect()
+    mycursor = mydb.cursor(buffered=True)
     try:
         data = request.get_json(force=False, silent=False, cache=True)
-        
-        mydb = connect()
-        mycursor = mydb.cursor(buffered=True)
   
-        mycursor.execute("SELECT * FROM kwork16_payments WHERE transaction_id = '{}'".format(data['order_uuid'))
+        mycursor.execute("SELECT * FROM kwork16_payments WHERE transaction_id = '{}'".format(data['order_uuid']))
         payment_info = mycursor.fetchone()
 
         asyncio.get_event_loop().run_until_complete(gg(payment_info[1], payment_info[2], payment_info[3], payment_info[5]))
@@ -62,7 +61,8 @@ def webhook():
     except:
         return 'warning' 
 
-
+    mycursor.close()
+    mydb.close()
 
 
 if __name__ == '__main__':
