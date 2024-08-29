@@ -36,7 +36,7 @@ async def gg(user_id, account):
 
 app = Flask(__name__)
 
-@app.route('/echo', methods=['POST'])
+@app.route('/webhook', methods=['POST'])
 def webhook():
 
     try:
