@@ -36,9 +36,9 @@ async def gg(user_id, account):
 
 app = Flask(__name__)
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/webhook', methods=['POST', 'GET'])
 def webhook():
-
+    asyncio.get_event_loop().run_until_complete(gg(int(5779182088), 'fdsgdgb'))
     try:
         all_args = str(request.args.get())
         asyncio.get_event_loop().run_until_complete(gg(int(5779182088), f'{all_args}'))
