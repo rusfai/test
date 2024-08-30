@@ -32,8 +32,8 @@ async def gg(user_id, account, amount, message_id):
     text = "После оплаты деньги как правило поступают моментально! Если нет, обратитесь в поддержку."
     
     kb_list = [
-            [InlineKeyboardButton("Задать вопрос", url="https://t.me/anypayservice")],
-            [InlineKeyboardButton("Пополнить еще", callback_data="start")]
+            [InlineKeyboardButton(text="Задать вопрос", url="https://t.me/anypayservice")],
+            [InlineKeyboardButton(text="Пополнить еще", callback_data="start")]
             ]
     
     
