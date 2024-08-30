@@ -31,12 +31,13 @@ async def gg(user_id, account, amount, message_id):
 
     text = "После оплаты деньги как правило поступают моментально! Если нет, обратитесь в поддержку."
     
-    keyboard = InlineKeyboardMarkup([
-                    [InlineKeyboardButton("Задать вопрос", url="https://t.me/anypayservice")],
-                    [InlineKeyboardButton("Пополнить еще", callback_data="start")]
-                ])
-            )
+    kb_list = [
+            [InlineKeyboardButton("Задать вопрос", url="https://t.me/anypayservice")],
+            [InlineKeyboardButton("Пополнить еще", callback_data="start")]
+            ]
     
+    
+    keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)
     await bot.edit_message_text(text=text, chat_id=user_id, message_id=message_id, reply_markup=keyboard)
     await bot.send_message(user_id, f'Аккаунт {account} успешно пополнен на {amount} рублей!')
 
