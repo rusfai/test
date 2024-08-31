@@ -4,15 +4,16 @@ from aiogram import Bot
 import mysql
 import mysql.connector
 from aiogram import types
-from aiogram.utils.keyboard import InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 
-token = '7541114114:AAE4FLFt7guDGBMztpx62lGrz0mDyTxMcfE'
+token = '7224598074:AAHahsZ7bwKowTPkApaWU6JI6jmNSOg2mag'
 
-db_host = "147.45.236.147"
+
+db_host = "93.93.207.52"
 db_user = "gen_user" 
-db_password = ",E3+QJ/\C0-q*{"
+db_password = "PUQC7sa$"
 db_name = "default_db"
 
 bot = Bot(token)
@@ -26,126 +27,51 @@ def connect():
     )
     return mydb
 
-async def gg(user_id, msg):
-    kb_list = [
-        [types.InlineKeyboardButton(text='🛫AVIATOR🛫', callback_data='aviator')],
-        [types.InlineKeyboardButton(text='🚀LUCKY JET🚀', callback_data='luckyjet')],
-        [types.InlineKeyboardButton(text='⭐MINES⭐', callback_data='mines')],
-        [types.InlineKeyboardButton(text='🆕ROYAL MINES🆕', callback_data='royalmines')],
-        [types.InlineKeyboardButton(text='🆕BOMBUCKS🆕', callback_data='bombucks')],
-    ]
+async def gg(user_id, account, amount, message_id):
 
+    text = "После оплаты деньги как правило поступают моментально! Если нет, обратитесь в поддержку."
+    
+    kb_list = [
+            [InlineKeyboardButton(text="Задать вопрос", url="https://t.me/anypayservice")],
+            [InlineKeyboardButton(text="Пополнить еще", callback_data="start")]
+            ]
+    
+    
     keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)
-    await bot.send_message(user_id, msg, reply_markup=keyboard)
+
+    kb = [
+      [types.InlineKeyboardButton(text="Подписаться", url=f'''https://t.me/anypaymentTG''')]
+      ]
+
+    keyboard_channel = InlineKeyboardMarkup(inline_keyboard=kb)
+
+
+    await bot.edit_message_text(text=text, chat_id=user_id, message_id=message_id, reply_markup=keyboard)
+    await bot.send_message(user_id, f'Аккаунт {account} успешно пополнен на {amount} рублей!\n\n<a href=https://t.me/anypaymentTG>Не забудь подписаться на наш ТГ канал</a>', reply_markup=keyboard_channel, parse_mode="HTML")
 
     return 'sucsess'
 
-
-async def edit(user_id, mess, lang, mod):
-
-    if lang == 'ru':
-        accept = '✅Я зарегестрировался'
-        instruction = '📚ИНСТРУКЦИЯ'
-        main_menu = '🏠Главное меню'
-        text = 'Подтвердите регистрацию'
-    elif lang == 'en':
-        accept = '✅I have registered' 
-        instruction = '📚INSTRUCTION'
-        main_menu = '🏠Main Menu'
-        text = 'Confirm registration'
-    elif lang == 'tr':
-        accept = '✅Kayıt oldum'
-        instruction = '📚TALİMAT'
-        main_menu = '🏠Ana menü'
-        text = 'Kaydı onaylayın'
-
-
-    kb_list = [
-        [types.InlineKeyboardButton(text=accept, callback_data=f'getsignal_{mod}_reg')],
-        [types.InlineKeyboardButton(text=instruction, callback_data=f'instruction_{mod}')],
-        [types.InlineKeyboardButton(text=main_menu, callback_data=mod)]
-    ]
-
-    keyboard = InlineKeyboardMarkup(inline_keyboard=kb_list)
-
-    await bot.edit_message_caption(chat_id=user_id, message_id=mess,  caption=text, reply_markup=keyboard)
-
-    return 'sucsess'
 
 app = Flask(__name__)
 
-@app.route('/echo', methods=['POST'])
-def echo():
-
+@app.route('/webhook', methods=['POST', 'GET'])
+def webhook():
+    mydb = connect()
+    mycursor = mydb.cursor(buffered=True)
     try:
-        id_user = request.args.get('ID')
+        data = request.get_json(force=False, silent=False, cache=True)
+  
+        mycursor.execute("SELECT * FROM kwork16_payments WHERE transaction_id = '{}'".format(data['order_uuid']))
+        payment_info = mycursor.fetchone()
 
-        id_user = int(id_user)
-        print(id_user)
-
-
-        
-        mydb = connect()
-        mycursor = mydb.cursor(buffered=True)
-
-        
-        mycursor.execute("SELECT register FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
-        register = mycursor.fetchone()
-        register = register[0]
-
-        if int(register) == 0:
-
-            mycursor.execute("SELECT lang FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
-            lang = mycursor.fetchone()
-            lang = lang[0]
-
-
-            if lang == 'ru':
-                text = 'Вы успешно зарегистрировались! Выберите режим'
-            elif lang == 'en':
-                text = 'You have successfully registered! Select a mode'
-            elif lang == 'tr':
-                text = 'Başarıyla kaydoldunuz! Modu seçin'
-            else:
-                text = 'Ошибка'
-
-            mycursor.execute("UPDATE kwork14_user SET register = '{}' WHERE id_tg = '{}' ".format(1, id_user))
-            mydb.commit()
-
-            mycursor.close()
-            mydb.close()
-
-            asyncio.get_event_loop().run_until_complete(gg(int(id_user), f'{text}'))
+        asyncio.get_event_loop().run_until_complete(gg(payment_info[1], payment_info[2], payment_info[3], payment_info[5]))
 
         return 'sucsess'
     except:
         return 'warning' 
 
-@app.route('/click', methods=['GET'])
-def click():
-
-
-    id_user = request.args.get('ID')
-    id_user = int(id_user)
-
-    message = request.args.get('message')
-    message = int(message)
-
-    mod = request.args.get('mod')
-    
-    mydb = connect()
-    mycursor = mydb.cursor(buffered=True)
-
-    mycursor.execute("SELECT lang FROM kwork14_user WHERE id_tg = '{}'".format(id_user))
-    lang = mycursor.fetchone()
-    lang = lang[0]
-
     mycursor.close()
     mydb.close()
-
-    asyncio.get_event_loop().run_until_complete(edit(id_user, message, lang, mod))
-
-    return redirect(f'https://to3a.com/1win?ID={id_user}', code=302)
 
 
 if __name__ == '__main__':
